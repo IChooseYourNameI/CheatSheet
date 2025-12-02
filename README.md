@@ -17,8 +17,8 @@ Licence: MIT / „dělej si co chceš, ale neříkej, že to je tvoje“
 - One-linery, které ti udělají radost (nebo tě pošlou do pekel)
 
 ## Obsah
-- [Základní must-know](#základní-must-know)
+- [Základní must-know](https://github.com/IChooseYourNameI/CheatSheet/blob/1bb9c7ec925c7dc4e47dd738c02e9d9f8f89d512/Cheatsheet%20-%20v%C5%A1echno%20chaos.php)
 - [Objekty & classy (2025 edition)](https://github.com/IChooseYourNameI/CheatSheet/blob/3e0c8b592e7a155b3d7fc8d48ebe0e898cd4329c/Objekty%20%2B%20Construct.php)
-- [Formuláře a $_POST bez slz](#formuláře-bez-tragédie)
-- [Stringy, arraye, ternárky](#hacky-které-miluješ-nenávidět)
+- [Formuláře a $_POST bez slz](https://github.com/IChooseYourNameI/CheatSheet/blob/1bb9c7ec925c7dc4e47dd738c02e9d9f8f89d512/Cheatsheet%20-%20HTML%20data%20do%20PHP.php)
+- [Stringy, arraye](https://github.com/IChooseYourNameI/CheatSheet/blob/1bb9c7ec925c7dc4e47dd738c02e9d9f8f89d512/Cheatsheet%20-%20v%C5%A1echno%20chaos.php)
 - [Debug & rychlé triky](#debug-pro-lenochy)
