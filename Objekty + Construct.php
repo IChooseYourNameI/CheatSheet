@@ -2,14 +2,14 @@
 
 //třída
 class Cat{
-    public $barva;
-    public $vaha;
+    public $color;
+    public $weight;
 
     //konstruktor(chytá hodnoty při vytváření objektu)
-    public function __construct($barva, $vaha){
+    public function __construct($color, $weight){
         //vlastnosti
-        $this->barva = $barva;
-        $this->vaha = $vaha;
+        $this->color = $color;
+        $this->weight = $weight;
     }
 
     //metoda
@@ -22,7 +22,7 @@ class Cat{
 $Tomáš = new Cat("oranžová", 4.5);
 var_dump($Tomáš); // vypíše informace o objektu
 echo ("<br>");
-echo "Tomáš je " . $Tomáš->barva . " a váží " . $Tomáš->vaha . " kg.\n";
+echo "Tomáš je " . $Tomáš->color . " a váží " . $Tomáš->weight . " kg.\n";
 echo ("<br>");
 
 //metoda
