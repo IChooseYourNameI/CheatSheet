@@ -18,7 +18,7 @@ Licence: MIT / „dělej si co chceš, ale neříkej, že to je tvoje“
 
 ## Obsah
 - [Základní must-know](#základní-must-know)
-- [Objekty & classy (2025 edition)](#objekty-2025)
+- [Objekty & classy (2025 edition)](#https://github.com/IChooseYourNameI/CheatSheet/blob/3e0c8b592e7a155b3d7fc8d48ebe0e898cd4329c/Objekty%20%2B%20Construct.php)
 - [Formuláře a $_POST bez slz](#formuláře-bez-tragédie)
 - [Stringy, arraye, ternárky](#hacky-které-miluješ-nenávidět)
 - [Debug & rychlé triky](#debug-pro-lenochy)
