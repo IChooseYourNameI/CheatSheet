@@ -1,86 +1,85 @@
-<!DOCTYPE html>
-<html lang="cs">
-<head>
-    <meta charset="UTF-8">
-    <title>Data z databáze MySQL přes PDO</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 40px;
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-        }
-        table {
-            width: 80%;
-            margin: 20px auto;
-            border-collapse: collapse;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-        .error {
-            color: red;
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-    <h1>Uživatelé z databáze</h1>
-
 <?php
-$host = 'localhost';
-$dbname = 'test';
-$username = 'root';
-$password = '';
 
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-    $stmt = $pdo->query("SELECT * FROM users");
+class User
+{
+    public ?int $id = null;
+    public string $name;
+    public string $email;
+    public ?string $password_hash = null;
+    public string $created_at;
 
-    $users = $stmt->fetchAll();
+    private static PDO $pdo;
 
-    if (count($users) > 0) {
-        // Výpis hlavičky tabulky
-        echo '<table>';
-        echo '<tr>';
-        foreach ($users[0] as $key => $value) {
-            echo '<th>' . htmlspecialchars($key) . '</th>';
-        }
-        echo '</tr>';
-
-        // Výpis dat
-        foreach ($users as $user) {
-            echo '<tr>';
-            foreach ($user as $value) {
-                echo '<td>' . htmlspecialchars($value) . '</td>';
-            }
-            echo '</tr>';
-        }
-        echo '</table>';
-    } else {
-        echo '<p class="error">Žádná data v tabulce.</p>';
+    public static function setConnection(PDO $pdo): void
+    {
+        self::$pdo = $pdo;
     }
 
-} catch (PDOException $e) {
-    echo '<p class="error">Chyba připojení nebo dotazu: ' . htmlspecialchars($e->getMessage()) . '</p>';
+    public static function find(int $id): ?self
+    {
+        $stmt = self::$pdo->prepare("SELECT * FROM users WHERE id = ?");
+        $stmt->execute([$id]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$data) return null;
+
+        $user = new self();
+        $user->id = $data['id'];
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        $user->password_hash = $data['password_hash'] ?? null;
+        $user->created_at = $data['created_at'];
+
+        return $user;
+    }
+
+    public function save(): bool
+    {
+        if ($this->id === null) {
+            // INSERT
+            $stmt = self::$pdo->prepare(
+                "INSERT INTO users (name, email, password_hash, created_at)
+                 VALUES (?, ?, ?, NOW())"
+            );
+            $ok = $stmt->execute([$this->name, $this->email, $this->password_hash]);
+            if ($ok) $this->id = self::$pdo->lastInsertId();
+            return $ok;
+        }
+
+        // UPDATE
+        $stmt = self::$pdo->prepare(
+            "UPDATE users SET name = ?, email = ?, password_hash = ? WHERE id = ?"
+        );
+        return $stmt->execute([$this->name, $this->email, $this->password_hash, $this->id]);
+    }
+
+    public function delete(): bool
+    {
+        if ($this->id === null) return false;
+
+        $stmt = self::$pdo->prepare("DELETE FROM users WHERE id = ?");
+        $ok = $stmt->execute([$this->id]);
+        if ($ok) $this->id = null;
+        return $ok;
+    }
 }
-?>
-</body>
-</html>
+
+$pdo = new PDO("mysql:host=localhost;dbname=test;charset=utf8", "root", "");
+User::setConnection($pdo);
+
+/*
+$user = new User();
+$user->name = "Petr Nový";
+$user->email = "petr@novy.cz";
+$user->password_hash = password_hash("123456", PASSWORD_DEFAULT);
+$user->save();
+
+echo "Nový ID: " . $user->id . "<br>";
+
+$found = User::find($user->id);
+if ($found) {
+    $found->name .= " (upraveno)";
+    $found->save();
+    $found->delete();
+}
+*/
